@@ -8,15 +8,15 @@ const exitBtn = document.getElementById('exit-btn');
 const tile = 20;
 const cols = canvas.width / tile;
 const rows = canvas.height / tile;
-let snake, dir, gmPos, gmsEaten, speedInterval, gameLoop;
+let snake, dir, gmPos, gmsEaten, gameLoop;
 
 function resetGame() {
-  snake = [{ x: Math.floor(cols/2), y: Math.floor(rows/2) }];
+  snake = [{ x: Math.floor(cols / 2), y: Math.floor(rows / 2) }];
   dir = { x: 1, y: 0 };
   placeGM();
   gmsEaten = 0;
   clearInterval(gameLoop);
-  gameLoop = setInterval(tick, 100); // faster = smaller ms
+  gameLoop = setInterval(tick, 80); // extreme speed
   overlay.classList.add('hidden');
 }
 
@@ -30,7 +30,6 @@ function placeGM() {
 function tick() {
   const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
-  // wrap-around
   head.x = (head.x + cols) % cols;
   head.y = (head.y + rows) % rows;
 
@@ -48,18 +47,18 @@ function tick() {
 }
 
 function draw() {
-  ctx.fillStyle = '#000';
+  ctx.fillStyle = '#1f1f2e';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // draw GM food
-  ctx.fillStyle = '#FF0';
+  // GM food
+  ctx.fillStyle = 'var(--eth-peach)';
   ctx.fillRect(gmPos.x * tile, gmPos.y * tile, tile, tile);
-  ctx.fillStyle = '#000';
-  ctx.font = '16px monospace';
+  ctx.fillStyle = 'var(--eth-blue)';
+  ctx.font = '14px "Press Start 2P", monospace';
   ctx.fillText('GM', gmPos.x * tile + 2, gmPos.y * tile + tile - 4);
 
-  // draw snake
-  ctx.fillStyle = '#0F0';
+  // snake
+  ctx.fillStyle = 'var(--eth-violet)';
   snake.forEach(seg => {
     ctx.fillRect(seg.x * tile, seg.y * tile, tile, tile);
   });
@@ -79,12 +78,12 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' && dir.x === 0) dir = { x: 1, y: 0 };
 });
 
-canvas.addEventListener('touchstart', handleTouch, { passive: false });
-let touchStart;
-function handleTouch(e) {
+let touchStart = null;
+canvas.addEventListener('touchstart', e => {
   const t = e.touches[0];
   touchStart = { x: t.clientX, y: t.clientY };
-}
+}, { passive: false });
+
 canvas.addEventListener('touchend', e => {
   const t = e.changedTouches[0];
   const dx = t.clientX - touchStart.x;
@@ -101,5 +100,4 @@ exitBtn.addEventListener('click', () => {
   window.location.href = 'https://www.x.com/Ethereum_OS';
 });
 
-// start
 resetGame();
