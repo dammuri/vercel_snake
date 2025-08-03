@@ -10,7 +10,10 @@ const rows = canvas.height / tile;
 
 let snake, dir, gmPos, gmsEaten, gameLoop;
 
-// 🎮 Reset game state
+// 🐍 Load custom icon
+const ethosImg = new Image();
+ethosImg.src = "ethos.png"; // make sure this exists in your folder
+
 function resetGame() {
   snake = [{ x: 10, y: 10 }];
   dir = { x: 1, y: 0 };
@@ -18,10 +21,9 @@ function resetGame() {
   placeGM();
   overlay.classList.add("hidden");
   clearInterval(gameLoop);
-  gameLoop = setInterval(tick, 80); // high speed
+  gameLoop = setInterval(tick, 80); // fast speed
 }
 
-// 🍽️ Random GM food placement
 function placeGM() {
   gmPos = {
     x: Math.floor(Math.random() * cols),
@@ -29,13 +31,10 @@ function placeGM() {
   };
 }
 
-// 🐍 Snake logic tick
 function tick() {
   const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-
   head.x = (head.x + cols) % cols;
   head.y = (head.y + rows) % rows;
-
   snake.unshift(head);
 
   if (head.x === gmPos.x && head.y === gmPos.y) {
@@ -49,34 +48,35 @@ function tick() {
   draw();
 }
 
-// 🎨 Render game
 function draw() {
   ctx.fillStyle = "#1f1f2e";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Draw GM block
-  ctx.fillStyle = "#f0cdc2";
-  ctx.fillRect(gmPos.x * tile, gmPos.y * tile, tile, tile);
-  ctx.fillStyle = "#141414";
-  ctx.font = "12px 'Press Start 2P'";
-  ctx.fillText("GM", gmPos.x * tile + 2, gmPos.y * tile + 15);
+  // Draw GM food
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "14px 'Press Start 2P'";
+  ctx.fillText("GM", gmPos.x * tile + 2, gmPos.y * tile + 16);
 
-  // Draw snake
-  ctx.fillStyle = "#c9b3f5";
+  // Draw snake as icons
   for (let s of snake) {
-    ctx.fillRect(s.x * tile, s.y * tile, tile, tile);
+    ctx.drawImage(ethosImg, s.x * tile, s.y * tile, tile, tile);
   }
 }
 
-// 🏆 Win condition
 function winGame() {
   clearInterval(gameLoop);
   const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-  messageEl.innerHTML = `Here is your code,<br>congratz you made it 10 streak GM!<br><br><strong>${code}</strong>`;
+  messageEl.innerHTML = `
+    Here is your code,<br>
+    congratz you made it 10 streak GM!<br><br>
+    <strong>${code}</strong><br><br>
+    Now claim your spot on 
+    <a href="https://ethos.vision" target="_blank" style="color:#88aaf1;">ethos.vision</a>
+  `;
   overlay.classList.remove("hidden");
 }
 
-// 🎮 Keyboard control
+// 🎮 Controls
 document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowUp" && dir.y === 0) dir = { x: 0, y: -1 };
   if (e.key === "ArrowDown" && dir.y === 0) dir = { x: 0, y: 1 };
@@ -84,7 +84,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight" && dir.x === 0) dir = { x: 1, y: 0 };
 });
 
-// 📱 Mobile swipe control
+// 📱 Swipe support
 let touchStart = null;
 canvas.addEventListener("touchstart", (e) => {
   const t = e.touches[0];
@@ -104,6 +104,4 @@ canvas.addEventListener("touchend", (e) => {
 });
 
 playBtn.addEventListener("click", resetGame);
-
-// 🚀 Start game
 resetGame();

@@ -37,6 +37,7 @@ canvas {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 
 #overlay.hidden {
