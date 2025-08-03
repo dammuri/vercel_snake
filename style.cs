@@ -11,8 +11,8 @@ body {
   color: var(--eth-blue);
   font-family: 'Press Start 2P', monospace;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   height: 100vh;
 }
 
@@ -28,9 +28,11 @@ canvas {
 
 #overlay {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(30,30,45,0.95);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 30, 45, 0.95);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,7 +45,7 @@ canvas {
 
 #message {
   color: var(--eth-aqua);
-  font-size: 14px;
+  font-size: 12px;
   margin-bottom: 20px;
   text-align: center;
   padding: 0 10px;
@@ -51,9 +53,9 @@ canvas {
 
 button {
   margin: 5px;
-  padding: 12px 24px;
+  padding: 10px 20px;
   font-family: 'Press Start 2P', monospace;
-  font-size: 12px;
+  font-size: 10px;
   color: #000;
   background: var(--eth-aqua);
   border: 2px solid var(--eth-blue);
